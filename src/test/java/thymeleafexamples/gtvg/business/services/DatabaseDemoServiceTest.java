@@ -14,8 +14,10 @@ class DatabaseDemoServiceTest {
 
     @Test
     void returnsNotConfiguredWhenDatabaseUrlIsMissing() {
+        @SuppressWarnings("unchecked")
+        final ObjectProvider<DatabaseDemoGateway> databaseDemoGateway = mock(ObjectProvider.class);
         final DatabaseDemoService service =
-                new DatabaseDemoService(new MockEnvironment(), mock(ObjectProvider.class));
+                new DatabaseDemoService(new MockEnvironment(), databaseDemoGateway);
 
         final DatabaseDemoStatus status = service.getStatus();
 
