@@ -1,39 +1,205 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 
   <head>
-    <title>Good Thymes Virtual Grocery</title>
+    <title>SMEConnect</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
   </head>
 
-  <body>
+  <body class="sme-page-body">
+    <header class="sme-header">
+      <a class="sme-logo" href="#" aria-label="SMEConnect home">SMEConnect</a>
+      <nav class="sme-nav" aria-label="Primary navigation">
+        <a href="#solutions">Gi&#7843;i Ph&#225;p</a>
+        <a href="#suppliers">Ngu&#7891;n Cung</a>
+        <a href="#talent">Tuy&#7875;n D&#7909;ng</a>
+        <a href="#community">C&#7897;ng &#272;&#7891;ng</a>
+      </nav>
+      <div class="sme-header-actions">
+        <a class="sme-button sme-button--ghost" href="#collaborator">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
+        <a class="sme-button sme-button--primary" href="#join">Tham gia v&#7899;i t&#432; c&#225;ch SME</a>
+      </div>
+    </header>
 
-    <div>
-      <img src="../../images/gtvglogo.png" alt="GTVG logo" title="GTVG logo" 
-           th:src="@{/images/gtvglogo.png}" th:alt-title="#{logo}" />
-    </div>
-  
-    <p th:utext="#{home.welcome(${session.user.name})}">Welcome to our grocery store, Sebastian!</p>
-  
-    <p>
-      Today is: <span th:with="df=#{date.format}" th:text="${#calendars.format(today,df)}">13 February 2011</span>
-    </p>
-    
-    <p>Please select an option</p>
-    <ol>
-      <li><a href="product/list.html" th:href="@{/product/list}">Product List</a></li>
-      <li><a href="order/list.html" th:href="@{/order/list}">Order List</a></li>
-      <li><a href="subscribe.html" th:href="@{/subscribe}">Subscribe to our Newsletter</a></li>
-      <li><a href="userprofile.html" th:href="@{/userprofile}">See User Profile</a></li>
-    </ol>
-      
-    <p>Now you are looking at a <span th:text="'working web application'">template file</span>.</p>
-  
-    <div th:insert="~{footer::copy}">&copy; 2011 The Static Templates</div>
-  
+    <main>
+      <section class="sme-hero" aria-labelledby="hero-title">
+        <div class="sme-hero__copy">
+          <p class="sme-pill">&#10022; S&#7913; m&#7879;nh t&#7841;o c&#225;c hi&#7879;p h&#7897;i t&#7853;p th&#7875; hi&#7879;u qu&#7843; v&#7899;i s&#7913;c &#7843;nh h&#432;&#7903;ng</p>
+          <h1 id="hero-title">Trao quy&#7873;n cho c&#225;c SME b&#7857;ng S&#7913;c m&#7841;nh t&#7853;p th&#7875;</h1>
+          <p class="sme-hero__text">Tham gia h&#7879; sinh th&#225;i hi&#7879;u qu&#7843; cao &#273;&#432;&#7907;c thi&#7871;t k&#7871; &#273;&#7875; m&#7903; r&#7897;ng quy m&#244; ho&#7841;t &#273;&#7897;ng c&#7911;a b&#7841;n. T&#7915; mua h&#224;ng nh&#243;m &#273;&#7871;n ngu&#7891;n cung c&#7845;p cao c&#7845;p, ch&#250;ng t&#244;i cung c&#7845;p c&#225;c c&#244;ng c&#7909; &#273;&#7875; t&#259;ng tr&#432;&#7903;ng chuy&#234;n nghi&#7879;p.</p>
+          <div class="sme-hero__actions">
+            <a class="sme-button sme-button--primary sme-button--large" href="#join">B&#7855;t &#272;&#7847;u Ngay <span aria-hidden="true">&#8594;</span></a>
+            <a class="sme-button sme-button--light sme-button--large" href="#stories">Xem C&#226;u Chuy&#7879;n Th&#224;nh C&#244;ng</a>
+          </div>
+        </div>
+
+        <div class="sme-hero__visual" aria-label="Business analytics dashboard illustration">
+          <div class="sme-dashboard">
+            <div class="sme-dashboard__topbar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="sme-dashboard__body">
+              <div class="sme-sidebar">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="sme-panel">
+                <div class="sme-chart">
+                  <span style="height: 28%"></span>
+                  <span style="height: 48%"></span>
+                  <span style="height: 34%"></span>
+                  <span style="height: 58%"></span>
+                  <span style="height: 44%"></span>
+                  <span style="height: 70%"></span>
+                  <span style="height: 38%"></span>
+                  <span style="height: 86%"></span>
+                  <span style="height: 52%"></span>
+                  <span style="height: 64%"></span>
+                  <span style="height: 45%"></span>
+                  <span style="height: 79%"></span>
+                </div>
+                <div class="sme-graph"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sme-stats" aria-label="Platform statistics">
+        <div>
+          <strong>40%</strong>
+          <span>Ti&#7871;t ki&#7879;m mua s&#7855;m trung b&#236;nh</span>
+        </div>
+        <div>
+          <strong>12k+</strong>
+          <span>SME &#273;ang ho&#7841;t &#273;&#7897;ng</span>
+        </div>
+        <div>
+          <strong>$2.4B</strong>
+          <span>Kh&#7889;i l&#432;&#7907;ng giao d&#7883;ch</span>
+        </div>
+        <div>
+          <strong>98%</strong>
+          <span>T&#7927; l&#7879; gi&#7919; ch&#226;n kh&#225;ch h&#224;ng</span>
+        </div>
+      </section>
+
+      <section class="sme-section" id="solutions" aria-labelledby="solutions-title">
+        <div class="sme-section__intro">
+          <h2 id="solutions-title">Gi&#7843;i Ph&#225;p Linh Ho&#7841;t Cho C&#225;c &#272;&#7897;i Ng&#361; Tinh G&#7885;n</h2>
+          <p>Lo&#7841;i b&#7887; g&#225;nh n&#7863;ng t&#7921; t&#7841;o. N&#7873;n t&#7843;ng &#273;&#7883;nh h&#432;&#7899;ng t&#7853;p th&#7875; c&#7911;a ch&#250;ng t&#244;i h&#7895; tr&#7907; ho&#7841;t &#273;&#7897;ng kh&#244;ng c&#7847;n b&#7897; ph&#7853;n n&#7897;i b&#7897;.</p>
+        </div>
+
+        <div class="sme-solution-grid">
+          <article class="sme-card sme-card--wide" id="suppliers">
+            <div class="sme-icon">&#9814;</div>
+            <h3>S&#7913;c M&#7841;nh Mua H&#224;ng Nh&#243;m</h3>
+            <p>T&#7853;n d&#7909;ng mua gi&#225; c&#7897;ng c&#7911;a ch&#250;ng t&#244;i. Ti&#7871;t ki&#7879;m t&#7899;i 40% cho c&#225;c m&#7909;c v&#7853;t ph&#7849;m t&#7915; d&#7883;ch v&#7909; &#273;&#225;m m&#226;y &#273;&#7871;n thi&#7871;t b&#7883; v&#259;n ph&#242;ng.</p>
+            <ul>
+              <li>Ti&#7871;p c&#7853;n nh&#224; cung c&#7845;p C&#7845;p 1</li>
+              <li>&#272;o&#224;n h&#7879; h&#7907;p &#273;&#7891;ng t&#7921; &#273;&#7897;ng</li>
+            </ul>
+            <div class="sme-card__media sme-card__media--savings"></div>
+          </article>
+
+          <article class="sme-card sme-card--dark" id="talent">
+            <div class="sme-icon sme-icon--dark">&#9881;</div>
+            <h3>C&#244;ng C&#7909; Tuy&#7875;n D&#7909;ng</h3>
+            <p>Ti&#7871;p c&#7853;n ngu&#7891;n c&#244;ng t&#225;c vi&#234;n h&#224;ng &#273;&#7847;u &#273;&#432;&#7907;c s&#224;ng l&#7885;c v&#224; t&#7921; &#273;&#7897;ng h&#243;a c&#225;c h&#432;&#7899;ng chuy&#234;n giai nh&#7853;p th&#244;ng qua c&#7897;ng c&#7909; c&#7911;a ch&#250;ng t&#244;i.</p>
+            <div class="sme-talent-list">
+              <span></span><span></span><em>Interviewed</em>
+              <span></span><span></span>
+            </div>
+          </article>
+
+          <article class="sme-card">
+            <div class="sme-icon">&#9635;</div>
+            <h3>Ngu&#7891;n Cung To&#224;n C&#7847;u</h3>
+            <p>M&#7841;ng l&#432;&#7899;i cung &#7913;ng ch&#237;nh x&#225;c k&#7871;t n&#7889;i b&#7841;n v&#7899;i c&#225;c nh&#224; s&#7843;n xu&#7845;t ph&#249; h&#7907;p tr&#234;n to&#224;n c&#7847;u.</p>
+            <div class="sme-card__photo"></div>
+          </article>
+
+          <article class="sme-card" id="community">
+            <div class="sme-icon">&#9776;</div>
+            <h3>Di&#7877;n &#272;&#224;n C&#7897;ng &#272;&#7891;ng</h3>
+            <p>Khai th&#225;c tr&#237; tu&#7879; t&#7853;p th&#7875; c&#7911;a nh&#7919;ng ng&#432;&#7901;i s&#225;ng l&#7853;p SME v&#224; c&#225;c nh&#224; l&#227;nh &#273;&#7841;o v&#7853;n h&#224;nh.</p>
+            <div class="sme-avatar-stack" aria-label="Community members">
+              <span>M</span>
+              <span>S</span>
+              <span>+25</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sme-section sme-section--testimonials" id="stories" aria-labelledby="stories-title">
+        <div class="sme-section__intro">
+          <h2 id="stories-title">&#272;&#432;&#7907;c Tin T&#432;&#7903;ng B&#7903;i C&#225;c SME &#272;&#7883;nh H&#432;&#7899;ng T&#259;ng Tr&#432;&#7903;ng</h2>
+        </div>
+
+        <div class="sme-testimonials">
+          <article class="sme-testimonial">
+            <div class="sme-stars" aria-label="Five star rating">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+            <blockquote>&quot;SMEConnect &#273;&#227; gi&#250;p c&#7855;t gi&#7843;m 35% chi ph&#237; ph&#7847;n m&#7873;m h&#224;ng n&#259;m c&#7911;a ch&#250;ng t&#244;i. S&#7913;c m&#7841;nh t&#7853;p th&#7875; c&#7845;p nh&#7853;t n&#224;y th&#7921;c s&#7921; m&#7897;t b&#432;&#7899;c ngo&#7863;t cho nh&#7919;ng &#273;&#7897;i v&#7853;n h&#224;nh.&quot;</blockquote>
+            <div class="sme-author"><span>MM</span><div><strong>Marcus Thomas</strong><small>CEO, Nexis Dynamics</small></div></div>
+          </article>
+
+          <article class="sme-testimonial">
+            <div class="sme-stars" aria-label="Five star rating">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+            <blockquote>&quot;C&#7917;i r&#7897;ng quy tr&#236;nh tuy&#7875;n d&#7909;ng &#273;&#227; kh&#244;ng c&#242;n g&#7907;i &#253; nh&#7901; v&#224;o. Ch&#250;ng t&#244;i &#273;&#227; &#273;&#243;n th&#224;nh Chuy&#234;n gia ph&#249; h&#7907;p nhanh ch&#243;ng, m&#224;n h&#432;&#7899;ng v&#224;o 10 ng&#224;y th&#244;ng qua m&#7841;ng l&#432;&#7899;i t&#7891;n d&#7909;ng th&#244;ng minh.&quot;</blockquote>
+            <div class="sme-author"><span>SK</span><div><strong>Sarah Jenkins</strong><small>COO, Elevate Logistics</small></div></div>
+          </article>
+
+          <article class="sme-testimonial">
+            <div class="sme-stars" aria-label="Five star rating">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+            <blockquote>&quot;Vi&#7879;c c&#243; th&#7875; t&#7853;p ngu&#7891;n cung sau th&#7921;c t&#7871; c&#225;c nh&#243;m SMEs x&#7917; l&#253; nh&#432; n&#224;y r&#7845;t c&#7847;n c&#243; cho th&#7883; tr&#432;&#7901;ng t&#259;ng tr&#432;&#7903;ng t&#237;nh an to&#224;n. &#272;&#227; m&#7903; kh&#243;a c&#225;c m&#244;i gi&#7907;i ngay l&#7853;p t&#7913;c.&quot;</blockquote>
+            <div class="sme-author"><span>DN</span><div><strong>Daniel Chen</strong><small>Strategic Head, Cerra Co</small></div></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="sme-cta" id="join" aria-labelledby="cta-title">
+        <h2 id="cta-title">S&#7861;n s&#224;ng m&#7903; r&#7897;ng quy m&#244; v&#7899;i s&#7913;c m&#7841;nh t&#7853;p th&#7875;?</h2>
+        <p>H&#227;y ch&#7885;n &#273;i&#7875;m b&#7855;t &#273;&#7847;u c&#7911;a b&#7841;n v&#224; gia nh&#7853;p c&#249;ng h&#224;ng ngh&#236;n chuy&#234;n gia &#273;ang x&#226;y d&#7921;ng t&#432;&#417;ng lai cho ho&#7841;t &#273;&#7897;ng SME.</p>
+        <div class="sme-cta__actions">
+          <a class="sme-button sme-button--primary sme-button--large" href="#join">Tham gia v&#7899;i t&#432; c&#225;ch SME</a>
+          <a class="sme-button sme-button--outline sme-button--large" id="collaborator" href="#collaborator">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="sme-footer">
+      <div>
+        <a class="sme-logo" href="#">SMEConnect</a>
+        <p>Trao quy&#7873;n cho s&#7921; &#273;&#7897;c l&#7853;p c&#7911;a t&#7845;t c&#7843; th&#244;ng qua s&#7913;c m&#7841;nh t&#7853;p th&#7875;. T&#259;ng ti&#7871;n c&#225;c b&#7897; trong m&#7897;t th&#7871; gi&#7899;i t&#432;&#417;ng t&#225;c SME.</p>
+      </div>
+      <div>
+        <h3>GI&#7842;I PH&#193;P</h3>
+        <a href="#solutions">Mua h&#224;ng nh&#243;m</a>
+        <a href="#talent">T&#7889;i &#432;u h&#243;a v&#7853;n h&#224;nh</a>
+        <a href="#suppliers">M&#7841;ng l&#432;&#7899;i ngu&#7891;n cung</a>
+      </div>
+      <div>
+        <h3>C&#7896;NG &#272;&#7890;NG</h3>
+        <a href="#community">Di&#7877;n &#273;&#224;n c&#7897;ng &#273;&#7891;ng</a>
+        <a href="#talent">Trung t&#226;m h&#7895; tr&#7907;</a>
+        <a href="#stories">Ngu&#7891;n l&#7921;c c&#7897;ng t&#225;c vi&#234;n</a>
+      </div>
+      <div>
+        <h3>PH&#193;P L&#221;</h3>
+        <a href="#">Ch&#237;nh s&#225;ch b&#7843;o m&#7853;t</a>
+        <a href="#">&#272;i&#7873;u kho&#7843;n d&#7883;ch v&#7909;</a>
+      </div>
+      <p class="sme-footer__copy">&copy; 2024 SMEConnect. Trao quy&#7873;n cho s&#7921; &#273;&#7897;c l&#7853;p c&#7911;a c&#225;c ch&#7911; s&#7903; h&#7919;u v&#7899;i h&#7907;p t&#225;c ki&#7871;n nghi&#7879;p.</p>
+    </footer>
   </body>
-  
+
 </html>
 
