@@ -21,9 +21,11 @@ package thymeleafexamples.gtvg.business.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import thymeleafexamples.gtvg.business.entities.Order;
 import thymeleafexamples.gtvg.business.entities.repositories.OrderRepository;
 
+@Service
 public class OrderService {
 
     

@@ -19,29 +19,25 @@
  */
 package thymeleafexamples.gtvg.web.controller;
 
-import java.io.Writer;
 import java.util.Calendar;
 
-import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.web.IWebExchange;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import thymeleafexamples.gtvg.business.services.DatabaseDemoService;
 
-public class HomeController implements IGTVGController {
+@Controller
+@RequiredArgsConstructor
+public class HomeController {
 
-    
-    public HomeController() {
-        super();
-    }
-    
-    
-    public void process(final IWebExchange webExchange, final ITemplateEngine templateEngine, final Writer writer)
-            throws Exception {
-        
-        WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
-        ctx.setVariable("today", Calendar.getInstance());
-        
-        templateEngine.process("home", ctx, writer);
-        
+    private final DatabaseDemoService databaseDemoService;
+
+    @GetMapping("/")
+    public String home(final Model model) {
+        model.addAttribute("today", Calendar.getInstance());
+        model.addAttribute("dbStatus", this.databaseDemoService.getStatus());
+        return "home";
     }
 
 }

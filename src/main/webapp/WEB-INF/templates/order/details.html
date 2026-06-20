@@ -8,20 +8,20 @@
     <link rel="stylesheet" type="text/css" media="all" href="../../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
   </head>
 
-  <body th:object="${order}">
+  <body>
 
     <h1>Order details</h1>
 
     <div>
-      <p><b>Code:</b> <span th:text="*{id}">99</span></p>
-      <p><b>Date:</b> <span th:text="*{#calendars.format(date,'dd MMM yyyy')}">13 jan 2011</span></p>
+      <p><b>Code:</b> <span th:text="${order.id}">99</span></p>
+      <p><b>Date:</b> <span th:text="${#calendars.format(order.date,'dd MMM yyyy')}">13 jan 2011</span></p>
     </div>
 
     <h2>Customer</h2>
       
-    <div th:object="*{customer}">
-      <p><b>Name:</b> <span th:text="*{name}">Frederic Tomato</span></p>
-      <p><b>Since:</b> <span th:text="*{#calendars.format(customerSince,'dd MMM yyyy')}">13 jan 2011</span></p>
+    <div>
+      <p><b>Name:</b> <span th:text="${order.customer.name}">Frederic Tomato</span></p>
+      <p><b>Since:</b> <span th:text="${#calendars.format(order.customer.customerSince,'dd MMM yyyy')}">13 jan 2011</span></p>
     </div>
   
     <h2>Products</h2>
@@ -32,7 +32,7 @@
         <th>AMOUNT</th>
         <th>PURCHASE PRICE</th>
       </tr>
-      <tr th:each="ol,row : *{orderLines}" th:class="${row.odd}? 'odd'">
+      <tr th:each="ol,row : ${order.orderLines}" th:class="${row.odd}? 'odd'">
         <td th:text="${ol.product.name}">Strawberries</td>
         <td th:text="${ol.amount}" class="number">3</td>
         <td th:text="${ol.purchasePrice}" class="number">23.32</td>
@@ -40,7 +40,7 @@
     </table>
 
     <div>
-      <b>TOTAL:</b> <span th:text="*{#aggregates.sum(orderLines.{purchasePrice * amount})}">35.23</span>
+      <b>TOTAL:</b> <span th:text="${order.total}">35.23</span>
     </div>
   
     <p>

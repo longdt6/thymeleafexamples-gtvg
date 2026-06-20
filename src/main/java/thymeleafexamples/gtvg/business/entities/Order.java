@@ -19,6 +19,7 @@
  */
 package thymeleafexamples.gtvg.business.entities;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -61,6 +62,14 @@ public class Order {
 
     public Set<OrderLine> getOrderLines() {
         return this.orderLines;
+    }
+
+    public BigDecimal getTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (final OrderLine orderLine : this.orderLines) {
+            total = total.add(orderLine.getPurchasePrice().multiply(new BigDecimal(orderLine.getAmount())));
+        }
+        return total;
     }
     
 }

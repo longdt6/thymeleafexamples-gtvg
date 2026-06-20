@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: gtvg
+      POSTGRES_USER: gtvg
+      POSTGRES_PASSWORD: gtvg
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gtvg -d gtvg"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - gtvg-postgres-data:/var/lib/postgresql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://gtvg:gtvg@db:5432/gtvg?sslmode=disable
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  gtvg-postgres-data:

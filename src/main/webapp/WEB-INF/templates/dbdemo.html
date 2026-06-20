@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>SMEConnect Render Postgres Demo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
+  </head>
+
+  <body class="sme-page-body">
+    <main class="sme-db-demo-page">
+      <section class="sme-db-demo" aria-labelledby="db-demo-title">
+        <p class="sme-pill">Render PostgreSQL</p>
+        <h1 id="db-demo-title">Database connection demo</h1>
+        <p class="sme-db-demo__lead">
+          This page reads <code>DATABASE_URL</code>, boots Spring Data JPA with Hibernate,
+          persists a heartbeat entity, and displays live database metadata.
+        </p>
+
+        <div class="sme-db-status" th:classappend="${dbStatus.connected}? ' sme-db-status--connected' : ' sme-db-status--offline'">
+          <span class="sme-db-status__dot" aria-hidden="true"></span>
+          <div>
+            <strong th:text="${dbStatus.connected}? 'Connected to Render PostgreSQL' : 'Database is not connected'">Database is not connected</strong>
+            <p th:text="${dbStatus.message}">DATABASE_URL is not configured yet.</p>
+          </div>
+        </div>
+
+        <dl class="sme-db-details" th:if="${dbStatus.connected}">
+          <div>
+            <dt>Data source</dt>
+            <dd th:text="${dbStatus.dataSource}">postgresql://host/database</dd>
+          </div>
+          <div>
+            <dt>Database</dt>
+            <dd th:text="${dbStatus.databaseName}">database</dd>
+          </div>
+          <div>
+            <dt>User</dt>
+            <dd th:text="${dbStatus.databaseUser}">user</dd>
+          </div>
+          <div>
+            <dt>Checked at</dt>
+            <dd th:text="${dbStatus.databaseTime}">time</dd>
+          </div>
+          <div>
+            <dt>Heartbeat rows</dt>
+            <dd th:text="${dbStatus.heartbeatCount}">1</dd>
+          </div>
+          <div class="sme-db-details__wide">
+            <dt>Version</dt>
+            <dd th:text="${dbStatus.databaseVersion}">PostgreSQL</dd>
+          </div>
+        </dl>
+
+        <div class="sme-db-demo__actions">
+          <a class="sme-button sme-button--primary sme-button--large" href="/" th:href="@{/}">Back to homepage</a>
+          <a class="sme-button sme-button--ghost sme-button--large" href="/db-demo" th:href="@{/db-demo}">Run demo again</a>
+        </div>
+      </section>
+    </main>
+  </body>
+
+</html>
