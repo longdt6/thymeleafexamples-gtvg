@@ -428,6 +428,10 @@ body.sme-page-body {
   grid-row: span 2;
 }
 
+.sme-card--sourcing {
+  padding-right: 172px;
+}
+
 .sme-icon {
   align-items: center;
   background: #dbf9fb;
@@ -756,6 +760,10 @@ body.sme-page-body {
 
   .sme-card__photo {
     opacity: 0.28;
+  }
+
+  .sme-card--sourcing {
+    padding-right: 28px;
   }
 
   .sme-dashboard__body {
