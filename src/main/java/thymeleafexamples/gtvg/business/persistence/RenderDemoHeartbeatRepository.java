@@ -17,29 +17,9 @@
  *
  * =============================================================================
  */
-package thymeleafexamples.gtvg.business.entities;
+package thymeleafexamples.gtvg.business.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class DatabaseDemoStatus {
-
-    private boolean configured = false;
-    private boolean connected = false;
-    private String message = null;
-    private String dataSource = null;
-    private String databaseName = null;
-    private String databaseUser = null;
-    private String databaseVersion = null;
-    private String databaseTime = null;
-    private Long heartbeatCount = null;
-
+public interface RenderDemoHeartbeatRepository extends JpaRepository<RenderDemoHeartbeat, Long> {
 }

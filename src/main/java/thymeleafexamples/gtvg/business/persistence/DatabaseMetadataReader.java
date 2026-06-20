@@ -17,29 +17,28 @@
  *
  * =============================================================================
  */
-package thymeleafexamples.gtvg.business.entities;
+package thymeleafexamples.gtvg.business.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class DatabaseDemoStatus {
+import javax.sql.DataSource;
 
-    private boolean configured = false;
-    private boolean connected = false;
-    private String message = null;
-    private String dataSource = null;
-    private String databaseName = null;
-    private String databaseUser = null;
-    private String databaseVersion = null;
-    private String databaseTime = null;
-    private Long heartbeatCount = null;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public class DatabaseMetadataReader {
+
+    private final DataSource dataSource;
+
+    public DatabaseMetadata read() throws SQLException {
+        try (Connection connection = this.dataSource.getConnection()) {
+            final DatabaseMetaData metaData = connection.getMetaData();
+            final String databaseVersion =
+                    metaData.getDatabaseProductName() + " " + metaData.getDatabaseProductVersion();
+            return new DatabaseMetadata(connection.getCatalog(), metaData.getUserName(), databaseVersion);
+        }
+    }
 
 }

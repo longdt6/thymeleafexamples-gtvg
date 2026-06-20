@@ -23,8 +23,9 @@ docker run --rm -p 8080:8080 \
   --name thymeleaf-gtvg thymeleaf-gtvg:latest
 ```
 
-Open `/db-demo` to verify that the application can connect to PostgreSQL, create the
-`render_demo_heartbeat` table, insert a heartbeat row, and read database metadata.
+Open `/db-demo` to verify that the application can connect to PostgreSQL through
+Spring Data JPA and Hibernate, persist a heartbeat entity in the
+`render_demo_heartbeat` table, and read database metadata.
 
 Render setup:
 

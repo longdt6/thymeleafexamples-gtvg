@@ -17,29 +17,17 @@
  *
  * =============================================================================
  */
-package thymeleafexamples.gtvg.business.entities;
+package thymeleafexamples.gtvg.business.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class DatabaseDemoStatus {
+@RequiredArgsConstructor
+public class DatabaseMetadata {
 
-    private boolean configured = false;
-    private boolean connected = false;
-    private String message = null;
-    private String dataSource = null;
-    private String databaseName = null;
-    private String databaseUser = null;
-    private String databaseVersion = null;
-    private String databaseTime = null;
-    private Long heartbeatCount = null;
+    private final String databaseName;
+    private final String databaseUser;
+    private final String databaseVersion;
 
 }

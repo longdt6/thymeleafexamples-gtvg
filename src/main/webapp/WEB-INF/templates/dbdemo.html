@@ -15,8 +15,8 @@
         <p class="sme-pill">Render PostgreSQL</p>
         <h1 id="db-demo-title">Database connection demo</h1>
         <p class="sme-db-demo__lead">
-          This page reads <code>DATABASE_URL</code>, connects with JDBC, creates a demo heartbeat table,
-          inserts a row, and displays live PostgreSQL metadata.
+          This page reads <code>DATABASE_URL</code>, boots Spring Data JPA with Hibernate,
+          persists a heartbeat entity, and displays live database metadata.
         </p>
 
         <div class="sme-db-status" th:classappend="${dbStatus.connected}? ' sme-db-status--connected' : ' sme-db-status--offline'">
@@ -41,7 +41,7 @@
             <dd th:text="${dbStatus.databaseUser}">user</dd>
           </div>
           <div>
-            <dt>Server time</dt>
+            <dt>Checked at</dt>
             <dd th:text="${dbStatus.databaseTime}">time</dd>
           </div>
           <div>
