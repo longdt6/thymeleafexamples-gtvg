@@ -1,136 +1,141 @@
-# Google SSO cho luồng Cộng tác viên
+# Google SSO for Collaborator Signup
 
-Tài liệu này mô tả cơ chế hoạt động của tính năng Google SSO khi người dùng bấm
-`Tham gia với tư cách Cộng tác viên`, và cách cấu hình để chạy với Google OAuth
-thật trên môi trường deploy.
+This document explains how Google SSO works when a user clicks the collaborator
+signup CTA, and how to configure the application for a real Google OAuth deploy.
 
-## Luồng hoạt động
+## Runtime flow
 
-1. Người dùng bấm nút `Tham gia với tư cách Cộng tác viên` trên trang chủ.
-2. Nút này gọi endpoint nội bộ:
+1. The user clicks the collaborator signup CTA on the home page.
+2. The CTA calls the internal endpoint:
    - `GET /auth/google/collaborator`
-3. `GoogleSsoStartController` kiểm tra cấu hình `GOOGLE_CLIENT_ID` và
+3. `GoogleSsoStartController` checks `GOOGLE_CLIENT_ID` and
    `GOOGLE_CLIENT_SECRET`.
-   - Nếu thiếu cấu hình, người dùng được redirect về trang chủ và thấy banner lỗi.
-   - Nếu đủ cấu hình, server sinh `state` ngẫu nhiên để chống CSRF, lưu `state` và
-     `redirect_uri` vào session.
-4. Server redirect người dùng sang Google OAuth:
+   - If either value is missing, the user is redirected back to the home page and
+     sees a configuration error banner.
+   - If both values are present, the server creates a random `state` value for
+     CSRF protection and stores `state` plus `redirect_uri` in the HTTP session.
+4. The server redirects the user to Google OAuth:
    - `https://accounts.google.com/o/oauth2/v2/auth`
-   - Scope đang dùng: `openid email profile`
+   - Scope: `openid email profile`
    - Response type: `code`
    - Prompt: `select_account`
-5. Sau khi người dùng đăng nhập và đồng ý quyền truy cập, Google redirect về:
+5. After the user signs in and grants access, Google redirects back to:
    - `GET /auth/google/callback?code=...&state=...`
-6. `GoogleSsoCallbackController` kiểm tra `state` trong query có khớp với `state`
-   đã lưu trong session không.
-   - Nếu không khớp hoặc thiếu `code`, server redirect về trang chủ và hiển thị lỗi.
-7. Nếu hợp lệ, server đổi authorization code lấy access token qua:
+6. `GoogleSsoCallbackController` verifies that the callback `state` matches the
+   `state` stored in the session.
+   - If `state` does not match, or `code` is missing, the server redirects back
+     to the home page and shows an error banner.
+7. If the callback is valid, the server exchanges the authorization code for an
+   access token through:
    - `POST https://oauth2.googleapis.com/token`
-8. Server dùng access token để lấy hồ sơ Google qua:
+8. The server uses the access token to fetch the Google profile through:
    - `GET https://openidconnect.googleapis.com/v1/userinfo`
-9. Email, tên, họ, tên đệm và avatar được lưu vào session dưới dạng
-   `GoogleCollaborator`.
-10. Người dùng được redirect về trang chủ và thấy banner đã kết nối Google thành công.
+9. Email, full name, given name, family name, and avatar URL are stored in the
+   session as `GoogleCollaborator`.
+10. The user is redirected back to the home page and sees a successful Google
+    connection banner.
 
-## Biến môi trường bắt buộc
+## Required environment variables
 
-Các biến sau phải có trên môi trường deploy thật:
+These variables must exist in the real deploy environment:
 
-- `GOOGLE_CLIENT_ID`: OAuth Client ID lấy từ Google Cloud Console.
-- `GOOGLE_CLIENT_SECRET`: OAuth Client Secret lấy từ Google Cloud Console.
+- `GOOGLE_CLIENT_ID`: OAuth Client ID from Google Cloud Console.
+- `GOOGLE_CLIENT_SECRET`: OAuth Client Secret from Google Cloud Console.
 
-Nếu thiếu một trong hai biến này, endpoint SSO không gọi Google và sẽ hiển thị lỗi
-cấu hình trên trang chủ.
+If either value is missing, the SSO endpoint does not call Google and shows a
+configuration error on the home page.
 
-## Biến môi trường tùy chọn
+## Optional environment variables
 
-- `GOOGLE_REDIRECT_URI`: Redirect URI cố định để gửi cho Google. Nên cấu hình biến
-  này nếu app chạy sau reverse proxy/load balancer hoặc domain public khác với host
-  nội bộ của servlet container.
-- `GOOGLE_OAUTH_AUTH_URL`: Override authorization endpoint. Mặc định là
+- `GOOGLE_REDIRECT_URI`: Fixed redirect URI sent to Google. Set this in
+  production when the app runs behind a reverse proxy/load balancer or when the
+  public domain differs from the servlet container host.
+- `GOOGLE_OAUTH_AUTH_URL`: Authorization endpoint override. Default:
   `https://accounts.google.com/o/oauth2/v2/auth`.
-- `GOOGLE_OAUTH_TOKEN_URL`: Override token endpoint. Mặc định là
+- `GOOGLE_OAUTH_TOKEN_URL`: Token endpoint override. Default:
   `https://oauth2.googleapis.com/token`.
-- `GOOGLE_OAUTH_USERINFO_URL`: Override userinfo endpoint. Mặc định là
+- `GOOGLE_OAUTH_USERINFO_URL`: Userinfo endpoint override. Default:
   `https://openidconnect.googleapis.com/v1/userinfo`.
 
-Nếu không đặt `GOOGLE_REDIRECT_URI`, app tự dựng redirect URI theo request hiện tại:
+If `GOOGLE_REDIRECT_URI` is not set, the app builds the redirect URI from the
+current request:
 
 ```text
 <scheme>://<host><context-path>/auth/google/callback
 ```
 
-App có hỗ trợ `X-Forwarded-Proto` và `X-Forwarded-Host`, nhưng với production nên
-đặt `GOOGLE_REDIRECT_URI` rõ ràng để tránh sai domain khi đi qua proxy.
+The app supports `X-Forwarded-Proto` and `X-Forwarded-Host`, but production
+deploys should set `GOOGLE_REDIRECT_URI` explicitly to avoid proxy host issues.
 
-## Cấu hình Google Cloud OAuth
+## Google Cloud OAuth setup
 
-1. Vào Google Cloud Console.
-2. Chọn hoặc tạo project cho app.
-3. Vào `APIs & Services` -> `OAuth consent screen`.
-4. Cấu hình consent screen:
-   - App name: tên sản phẩm hiển thị với người dùng.
-   - User support email: email hỗ trợ.
-   - Authorized domains: domain public của app, ví dụ `example.com`.
-   - Scopes: dùng các scope cơ bản `openid`, `email`, `profile`.
-5. Vào `APIs & Services` -> `Credentials`.
-6. Tạo credential mới:
+1. Open Google Cloud Console.
+2. Select or create the project for this app.
+3. Go to `APIs & Services` -> `OAuth consent screen`.
+4. Configure the consent screen:
+   - App name: the product name shown to users.
+   - User support email: support contact email.
+   - Authorized domains: the public app domain, for example `example.com`.
+   - Scopes: use the basic scopes `openid`, `email`, and `profile`.
+5. Go to `APIs & Services` -> `Credentials`.
+6. Create a new credential:
    - Type: `OAuth client ID`.
    - Application type: `Web application`.
-7. Thêm Authorized redirect URI đúng với domain deploy:
+7. Add the authorized redirect URI for the deployed domain:
    - `https://<host>/auth/google/callback`
-   - Ví dụ: `https://smeconnect.example.com/auth/google/callback`
-8. Copy `Client ID` vào `GOOGLE_CLIENT_ID`.
-9. Copy `Client secret` vào `GOOGLE_CLIENT_SECRET`.
+   - Example: `https://smeconnect.example.com/auth/google/callback`
+8. Copy `Client ID` to `GOOGLE_CLIENT_ID`.
+9. Copy `Client secret` to `GOOGLE_CLIENT_SECRET`.
 
-Giá trị Authorized redirect URI trên Google Cloud phải khớp chính xác với redirect
-URI mà app gửi sang Google. Khác scheme, host, path hoặc context path đều có thể làm
-Google trả lỗi `redirect_uri_mismatch`.
+The authorized redirect URI in Google Cloud must exactly match the redirect URI
+sent by the app. Different scheme, host, path, or context path values can cause
+Google to return `redirect_uri_mismatch`.
 
-## Cấu hình deploy thật
+## Real deploy configuration
 
-Ví dụ biến môi trường cho app chạy ở `https://smeconnect.example.com`:
+Example environment variables for an app running at
+`https://smeconnect.example.com`:
 
 ```text
-GOOGLE_CLIENT_ID=<client-id-tu-google-cloud>
-GOOGLE_CLIENT_SECRET=<client-secret-tu-google-cloud>
+GOOGLE_CLIENT_ID=<google-cloud-client-id>
+GOOGLE_CLIENT_SECRET=<google-cloud-client-secret>
 GOOGLE_REDIRECT_URI=https://smeconnect.example.com/auth/google/callback
 ```
 
-Nếu WAR được deploy dưới context path khác root, ví dụ `/gtvg`, redirect URI phải
-bao gồm context path:
+If the WAR is deployed under a non-root context path, for example `/gtvg`, the
+redirect URI must include that context path:
 
 ```text
 GOOGLE_REDIRECT_URI=https://smeconnect.example.com/gtvg/auth/google/callback
 ```
 
-Và Authorized redirect URI trên Google Cloud cũng phải dùng đúng URL đó.
+The Google Cloud authorized redirect URI must use the same URL.
 
-## Kiểm tra sau deploy
+## Post-deploy verification
 
-1. Mở trang chủ của app.
-2. Bấm `Tham gia với tư cách Cộng tác viên`.
-3. Trình duyệt phải chuyển sang màn hình đăng nhập/consent của Google.
-4. Đăng nhập bằng tài khoản Google hợp lệ.
-5. Sau callback, app phải quay lại trang chủ và hiển thị banner đã kết nối Google
-   cho Cộng tác viên kèm tên/email.
+1. Open the application home page.
+2. Click the collaborator signup CTA.
+3. The browser should navigate to the Google sign-in/consent screen.
+4. Sign in with a valid Google account.
+5. After the callback, the app should return to the home page and show a Google
+   connection banner with the collaborator name/email.
 
-Nếu Google hiển thị `invalid_client`, hãy kiểm tra lại `GOOGLE_CLIENT_ID` và
+If Google shows `invalid_client`, check `GOOGLE_CLIENT_ID` and
 `GOOGLE_CLIENT_SECRET`.
 
-Nếu Google hiển thị `redirect_uri_mismatch`, hãy kiểm tra:
+If Google shows `redirect_uri_mismatch`, check:
 
-- `GOOGLE_REDIRECT_URI` trên deploy.
-- Authorized redirect URI trong Google Cloud.
-- Context path của WAR nếu app không chạy ở root `/`.
-- Scheme `https` thay vì `http` trên production.
+- `GOOGLE_REDIRECT_URI` in the deploy environment.
+- Authorized redirect URI in Google Cloud.
+- WAR context path if the app does not run at root `/`.
+- Production scheme, which should normally be `https`.
 
-## File liên quan
+## Related files
 
-- `GoogleSsoStartController`: tạo request OAuth và redirect sang Google.
-- `GoogleSsoCallbackController`: xử lý callback, validate `state`, đổi `code` lấy
-  profile.
-- `GoogleSsoConfig`: đọc biến môi trường và dựng redirect URI.
-- `GoogleSsoService`: gọi Google token endpoint và userinfo endpoint.
-- `GoogleCollaborator`: model session lưu thông tin cộng tác viên đăng nhập Google.
-- `home.html`: chứa CTA cộng tác viên và banner trạng thái SSO.
+- `GoogleSsoStartController`: creates the OAuth request and redirects to Google.
+- `GoogleSsoCallbackController`: handles the callback, validates `state`, and
+  exchanges `code` for the profile.
+- `GoogleSsoConfig`: reads environment variables and builds the redirect URI.
+- `GoogleSsoService`: calls the Google token endpoint and userinfo endpoint.
+- `GoogleCollaborator`: session model for the Google collaborator profile.
+- `home.html`: contains the collaborator CTA and SSO status banners.
