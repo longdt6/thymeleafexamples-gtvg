@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.thymeleaf.web.IWebRequest;
+import thymeleafexamples.gtvg.web.controller.DatabaseDemoController;
 import thymeleafexamples.gtvg.web.controller.HomeController;
 import thymeleafexamples.gtvg.web.controller.IGTVGController;
 import thymeleafexamples.gtvg.web.controller.OrderDetailsController;
@@ -42,6 +43,7 @@ public class ControllerMappings {
     static {
         controllersByURL = new HashMap<String, IGTVGController>();
         controllersByURL.put("/", new HomeController());
+        controllersByURL.put("/db-demo", new DatabaseDemoController());
         controllersByURL.put("/product/list", new ProductListController());
         controllersByURL.put("/product/comments", new ProductCommentsController());
         controllersByURL.put("/order/list", new OrderListController());

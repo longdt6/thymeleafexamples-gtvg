@@ -17,6 +17,7 @@
         <a href="#suppliers">Ngu&#7891;n Cung</a>
         <a href="#talent">Tuy&#7875;n D&#7909;ng</a>
         <a href="#community">C&#7897;ng &#272;&#7891;ng</a>
+        <a href="/db-demo" th:href="@{/db-demo}">DB Demo</a>
       </nav>
       <div class="sme-header-actions">
         <a class="sme-button sme-button--ghost" href="#collaborator">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
@@ -69,6 +70,31 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="sme-section sme-section--db" aria-labelledby="db-demo-title">
+        <div class="sme-db-card">
+          <div>
+            <p class="sme-pill">Render PostgreSQL</p>
+            <h2 id="db-demo-title">Demo k&#7871;t n&#7889;i database trong project</h2>
+            <p>
+              App &#273;&#7885;c <code>DATABASE_URL</code>, k&#7871;t n&#7889;i PostgreSQL b&#7857;ng JDBC,
+              t&#7841;o b&#7843;ng heartbeat demo v&#224; ghi m&#7897;t d&#242;ng m&#7895;i l&#7847;n trang n&#224;y ch&#7841;y.
+            </p>
+          </div>
+          <div class="sme-db-status" th:classappend="${dbStatus.connected}? ' sme-db-status--connected' : ' sme-db-status--offline'">
+            <span class="sme-db-status__dot" aria-hidden="true"></span>
+            <div>
+              <strong th:text="${dbStatus.connected}? 'Connected to Render PostgreSQL' : 'Database is not connected'">Database is not connected</strong>
+              <p th:text="${dbStatus.message}">DATABASE_URL is not configured yet.</p>
+              <small th:if="${dbStatus.connected}">
+                Heartbeat rows:
+                <span th:text="${dbStatus.heartbeatCount}">0</span>
+              </small>
+            </div>
+          </div>
+          <a class="sme-button sme-button--primary sme-button--large" href="/db-demo" th:href="@{/db-demo}">Xem DB Demo</a>
         </div>
       </section>
 

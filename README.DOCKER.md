@@ -15,9 +15,20 @@ Run the container:
 docker run --rm -p 8080:8080 --name thymeleaf-gtvg thymeleaf-gtvg:latest
 ```
 
+Run the container with a Render PostgreSQL database demo:
+
+```bash
+docker run --rm -p 8080:8080 \
+  -e DATABASE_URL="postgresql://user:password@host:5432/database?sslmode=require" \
+  --name thymeleaf-gtvg thymeleaf-gtvg:latest
+```
+
+Open `/db-demo` to verify that the application can connect to PostgreSQL, create the
+`render_demo_heartbeat` table, insert a heartbeat row, and read database metadata.
+
 Notes:
 - The `pom.xml` uses `jakarta.servlet:jakarta.servlet-api:5.0.0` (scope provided). Tomcat 10+ is required because it implements Jakarta Servlet 5.
-- The Dockerfile builds the WAR using the `maven:3.8.8-openjdk-8` image and then deploys it to `tomcat:10.1.14-jdk8-corretto` as `ROOT.war`.
+- The Dockerfile builds the WAR using the `maven:3.8.8` image and then deploys it to `tomcat:10` as `ROOT.war`.
 - If you need to include external configs (datasource via JNDI), mount a `context.xml` into `/usr/local/tomcat/conf/context.xml` or configure a custom `server.xml`/JNDI resource as needed.
 
 Troubleshooting:
