@@ -40,6 +40,7 @@ import org.thymeleaf.web.IWebRequest;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 import thymeleafexamples.gtvg.business.entities.User;
 import thymeleafexamples.gtvg.web.controller.IGTVGController;
+import thymeleafexamples.gtvg.web.controller.IServletGTVGController;
 import thymeleafexamples.gtvg.web.mapping.ControllerMappings;
 
 
@@ -57,7 +58,9 @@ public class GTVGFilter implements Filter {
     
     private static void addUserToSession(final HttpServletRequest request) {
         // Simulate a real user session by adding a user object
-        request.getSession(true).setAttribute("user", new User("John", "Apricot", "Antarctica", null));
+        if (request.getSession(true).getAttribute("user") == null) {
+            request.getSession(true).setAttribute("user", new User("John", "Apricot", "Antarctica", null));
+        }
     }
 
 
@@ -114,6 +117,11 @@ public class GTVGFilter implements Filter {
             final IGTVGController controller = ControllerMappings.resolveControllerForRequest(webRequest);
             if (controller == null) {
                 return false;
+            }
+
+            if (controller instanceof IServletGTVGController) {
+                ((IServletGTVGController) controller).process(request, response);
+                return true;
             }
 
             /*

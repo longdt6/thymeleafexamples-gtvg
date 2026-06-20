@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.thymeleaf.web.IWebRequest;
+import thymeleafexamples.gtvg.web.controller.GoogleSsoCallbackController;
+import thymeleafexamples.gtvg.web.controller.GoogleSsoStartController;
 import thymeleafexamples.gtvg.web.controller.HomeController;
 import thymeleafexamples.gtvg.web.controller.IGTVGController;
 import thymeleafexamples.gtvg.web.controller.OrderDetailsController;
@@ -42,6 +44,8 @@ public class ControllerMappings {
     static {
         controllersByURL = new HashMap<String, IGTVGController>();
         controllersByURL.put("/", new HomeController());
+        controllersByURL.put("/auth/google/collaborator", new GoogleSsoStartController());
+        controllersByURL.put("/auth/google/callback", new GoogleSsoCallbackController());
         controllersByURL.put("/product/list", new ProductListController());
         controllersByURL.put("/product/comments", new ProductCommentsController());
         controllersByURL.put("/order/list", new OrderListController());
