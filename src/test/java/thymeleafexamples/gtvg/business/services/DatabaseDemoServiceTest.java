@@ -2,7 +2,6 @@ package thymeleafexamples.gtvg.business.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
@@ -14,8 +13,8 @@ class DatabaseDemoServiceTest {
 
     @Test
     void returnsNotConfiguredWhenDatabaseUrlIsMissing() {
-        @SuppressWarnings("unchecked")
-        final ObjectProvider<DatabaseDemoGateway> databaseDemoGateway = mock(ObjectProvider.class);
+        final ObjectProvider<DatabaseDemoGateway> databaseDemoGateway = new ObjectProvider<DatabaseDemoGateway>() {
+        };
         final DatabaseDemoService service =
                 new DatabaseDemoService(new MockEnvironment(), databaseDemoGateway);
 
