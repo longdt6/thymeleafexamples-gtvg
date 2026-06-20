@@ -13,7 +13,7 @@ services:
       timeout: 5s
       retries: 12
     volumes:
-      - gtvg-postgres-data:/var/lib/postgresql/data
+      - gtvg-postgres-data:/var/lib/postgresql
 
   app:
     build:

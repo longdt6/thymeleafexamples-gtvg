@@ -55,6 +55,9 @@ public class DatabaseDemoPersistenceConfig {
     public HikariDataSource dataSource(final DatabaseConnectionProperties properties) {
         final HikariDataSource dataSource = new HikariDataSource();
         dataSource.setPoolName("render-demo-jpa");
+        if (properties.getJdbcUrl().startsWith("jdbc:postgresql:")) {
+            dataSource.setDriverClassName("org.postgresql.Driver");
+        }
         dataSource.setJdbcUrl(properties.getJdbcUrl());
         dataSource.setMaximumPoolSize(3);
         dataSource.setMinimumIdle(0);
