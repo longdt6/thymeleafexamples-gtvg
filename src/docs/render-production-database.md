@@ -1,8 +1,9 @@
 # Render Production Database Configuration
 
-This project can connect to a Render PostgreSQL database in production through the
-`DATABASE_URL` environment variable. The database demo uses Spring Data JPA and
-Hibernate to persist rows in the `render_demo_heartbeat` table.
+This project runs as a Spring Boot/Spring MVC web application and can connect to
+a Render PostgreSQL database in production through the `DATABASE_URL`
+environment variable. The database demo uses Spring Data JPA and Hibernate to
+persist rows in the `render_demo_heartbeat` table.
 
 ## Current Render resources
 
@@ -58,12 +59,13 @@ Do not commit the real URL or password to the repository.
 
 ## How the application uses the database
 
-- `DatabaseDemoService` reads `DATABASE_URL`.
-- `DatabaseDemoSpringContext` lazily starts a Spring context for the database
-  demo.
-- `DatabaseDemoPersistenceConfig` creates a HikariCP datasource, an
-  `EntityManagerFactory`, Spring Data JPA repositories, and a transaction
-  manager.
+- Spring MVC controllers handle routes such as `/`, `/db-demo`,
+  `/product/list`, and `/order/list`.
+- `DatabaseDemoService` is a Spring `@Service` and reads `DATABASE_URL` from the
+  Spring environment.
+- `DatabaseDemoPersistenceConfig` is enabled only when `DATABASE_URL` is set.
+  It creates a HikariCP datasource, an `EntityManagerFactory`, Spring Data JPA
+  repositories, and a transaction manager.
 - `RenderDemoHeartbeatRepository` persists heartbeat rows through Spring Data
   JPA.
 - Hibernate currently uses `hibernate.hbm2ddl.auto=update` for this demo so the

@@ -19,34 +19,26 @@
  */
 package thymeleafexamples.gtvg.web.controller;
 
-import java.io.Writer;
 import java.util.List;
 
-import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.web.IWebExchange;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import thymeleafexamples.gtvg.business.entities.Order;
 import thymeleafexamples.gtvg.business.services.OrderService;
 
-public class OrderListController implements IGTVGController {
+@Controller
+@RequiredArgsConstructor
+public class OrderListController {
 
-    
-    public OrderListController() {
-        super();
-    }
-    
-    
-    public void process(final IWebExchange webExchange, final ITemplateEngine templateEngine, final Writer writer)
-            throws Exception {
-        
-        final OrderService orderService = new OrderService();
-        final List<Order> allOrders = orderService.findAll(); 
-        
-        final WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
-        ctx.setVariable("orders", allOrders);
-        
-        templateEngine.process("order/list", ctx, writer);
-        
+    private final OrderService orderService;
+
+    @GetMapping("/order/list")
+    public String listOrders(final Model model) {
+        final List<Order> allOrders = this.orderService.findAll();
+        model.addAttribute("orders", allOrders);
+        return "order/list";
     }
 
 }

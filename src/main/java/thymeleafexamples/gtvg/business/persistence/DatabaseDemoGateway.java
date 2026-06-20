@@ -23,11 +23,9 @@ import java.sql.SQLException;
 import java.time.Instant;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import thymeleafexamples.gtvg.business.entities.DatabaseDemoStatus;
 
-@Service
 @RequiredArgsConstructor
 public class DatabaseDemoGateway {
 

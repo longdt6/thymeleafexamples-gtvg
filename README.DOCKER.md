@@ -37,7 +37,7 @@ Render setup:
 If you use the external connection string, append `sslmode=require` to the URL.
 
 Notes:
-- The `pom.xml` uses `jakarta.servlet:jakarta.servlet-api:5.0.0` (scope provided). Tomcat 10+ is required because it implements Jakarta Servlet 5.
+- The application is a Spring Boot/Spring MVC WAR deployed to Tomcat 10.
 - The Dockerfile builds the WAR using the `maven:3.8.8` image and then deploys it to `tomcat:10` as `ROOT.war`.
 - If you need to include external configs (datasource via JNDI), mount a `context.xml` into `/usr/local/tomcat/conf/context.xml` or configure a custom `server.xml`/JNDI resource as needed.
 

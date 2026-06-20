@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -39,12 +39,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 
 @Configuration
-@ComponentScan(basePackageClasses = DatabaseDemoGateway.class)
+@Conditional(DatabaseUrlConfiguredCondition.class)
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackageClasses = RenderDemoHeartbeatRepository.class)
 public class DatabaseDemoPersistenceConfig {
 
-    static final String DATABASE_URL_PROPERTY = "database.url";
+    public static final String DATABASE_URL_PROPERTY = "database.url";
 
     @Bean
     public DatabaseConnectionProperties databaseConnectionProperties(final Environment environment) {
@@ -88,6 +88,14 @@ public class DatabaseDemoPersistenceConfig {
     @Bean
     public PlatformTransactionManager transactionManager(final EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    @Bean
+    public DatabaseDemoGateway databaseDemoGateway(
+            final RenderDemoHeartbeatRepository heartbeatRepository,
+            final DatabaseConnectionProperties connectionProperties,
+            final DatabaseMetadataReader metadataReader) {
+        return new DatabaseDemoGateway(heartbeatRepository, connectionProperties, metadataReader);
     }
 
     @Bean

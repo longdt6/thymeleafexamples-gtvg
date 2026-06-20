@@ -19,30 +19,24 @@
  */
 package thymeleafexamples.gtvg.web.controller;
 
-import java.io.Writer;
-
-import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.web.IWebExchange;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import thymeleafexamples.gtvg.business.entities.DatabaseDemoStatus;
 import thymeleafexamples.gtvg.business.services.DatabaseDemoService;
 
-public class DatabaseDemoController implements IGTVGController {
+@Controller
+@RequiredArgsConstructor
+public class DatabaseDemoController {
 
-    public DatabaseDemoController() {
-        super();
-    }
+    private final DatabaseDemoService databaseDemoService;
 
-    public void process(final IWebExchange webExchange, final ITemplateEngine templateEngine, final Writer writer)
-            throws Exception {
-
-        final DatabaseDemoService databaseDemoService = new DatabaseDemoService();
-        final DatabaseDemoStatus dbStatus = databaseDemoService.getStatus();
-
-        final WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
-        ctx.setVariable("dbStatus", dbStatus);
-
-        templateEngine.process("dbdemo", ctx, writer);
+    @GetMapping("/db-demo")
+    public String showDatabaseDemo(final Model model) {
+        final DatabaseDemoStatus dbStatus = this.databaseDemoService.getStatus();
+        model.addAttribute("dbStatus", dbStatus);
+        return "dbdemo";
 
     }
 

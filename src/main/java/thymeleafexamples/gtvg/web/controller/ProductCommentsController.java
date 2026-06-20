@@ -19,35 +19,27 @@
  */
 package thymeleafexamples.gtvg.web.controller;
 
-import java.io.Writer;
-
-import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.web.IWebExchange;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import thymeleafexamples.gtvg.business.entities.Product;
 import thymeleafexamples.gtvg.business.services.ProductService;
 
-public class ProductCommentsController implements IGTVGController {
+@Controller
+@RequiredArgsConstructor
+public class ProductCommentsController {
 
-    
-    public ProductCommentsController() {
-        super();
-    }
-    
-    
-    public void process(final IWebExchange webExchange, final ITemplateEngine templateEngine, final Writer writer)
-            throws Exception {
-        
-        final Integer prodId = Integer.valueOf(webExchange.getRequest().getParameterValue("prodId"));
-        
-        final ProductService productService = new ProductService();
-        final Product product = productService.findById(prodId);
-        
-        final WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
-        ctx.setVariable("prod", product);
-        
-        templateEngine.process("product/comments", ctx, writer);
-        
+    private final ProductService productService;
+
+    @GetMapping("/product/comments")
+    public String showProductComments(
+            @RequestParam("prodId") final Integer prodId,
+            final Model model) {
+        final Product product = this.productService.findById(prodId);
+        model.addAttribute("prod", product);
+        return "product/comments";
     }
 
 }

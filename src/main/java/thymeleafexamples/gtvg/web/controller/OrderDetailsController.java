@@ -19,35 +19,27 @@
  */
 package thymeleafexamples.gtvg.web.controller;
 
-import java.io.Writer;
-
-import org.thymeleaf.ITemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.web.IWebExchange;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import thymeleafexamples.gtvg.business.entities.Order;
 import thymeleafexamples.gtvg.business.services.OrderService;
 
-public class OrderDetailsController implements IGTVGController {
+@Controller
+@RequiredArgsConstructor
+public class OrderDetailsController {
 
-    
-    public OrderDetailsController() {
-        super();
-    }
-    
-    
-    public void process(final IWebExchange webExchange, final ITemplateEngine templateEngine, final Writer writer)
-            throws Exception {
-        
-        final Integer orderId = Integer.valueOf(webExchange.getRequest().getParameterValue("orderId"));
-        
-        final OrderService orderService = new OrderService();
-        final Order order = orderService.findById(orderId);
-        
-        final WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
-        ctx.setVariable("order", order);
-        
-        templateEngine.process("order/details", ctx, writer);
-        
+    private final OrderService orderService;
+
+    @GetMapping("/order/details")
+    public String showOrderDetails(
+            @RequestParam("orderId") final Integer orderId,
+            final Model model) {
+        final Order order = this.orderService.findById(orderId);
+        model.addAttribute("order", order);
+        return "order/details";
     }
 
 }

@@ -20,27 +20,27 @@
 package thymeleafexamples.gtvg.business.services;
 
 import java.sql.SQLException;
-import java.util.function.Supplier;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import thymeleafexamples.gtvg.business.entities.DatabaseDemoStatus;
-import thymeleafexamples.gtvg.business.persistence.DatabaseDemoSpringContext;
+import thymeleafexamples.gtvg.business.persistence.DatabaseDemoGateway;
+import thymeleafexamples.gtvg.business.persistence.DatabaseDemoPersistenceConfig;
 
+@Service
+@RequiredArgsConstructor
 public class DatabaseDemoService {
 
-    private static final String DATABASE_URL_ENV = "DATABASE_URL";
-    private final Supplier<String> databaseUrlSupplier;
-
-    public DatabaseDemoService() {
-        this(() -> System.getenv(DATABASE_URL_ENV));
-    }
-
-    DatabaseDemoService(final Supplier<String> databaseUrlSupplier) {
-        this.databaseUrlSupplier = databaseUrlSupplier;
-    }
+    private final Environment environment;
+    private final ObjectProvider<DatabaseDemoGateway> databaseDemoGateway;
 
     public DatabaseDemoStatus getStatus() {
-        final String databaseUrl = this.databaseUrlSupplier.get();
-        if (databaseUrl == null || databaseUrl.trim().isEmpty()) {
+        final String databaseUrl =
+                this.environment.getProperty(DatabaseDemoPersistenceConfig.DATABASE_URL_PROPERTY);
+        if (!StringUtils.hasText(databaseUrl)) {
             return DatabaseDemoStatus.builder()
                     .configured(false)
                     .connected(false)
@@ -49,7 +49,7 @@ public class DatabaseDemoService {
         }
 
         try {
-            return DatabaseDemoSpringContext.getGateway(databaseUrl).recordHeartbeatAndReadStatus();
+            return this.databaseDemoGateway.getObject().recordHeartbeatAndReadStatus();
         } catch (final SQLException e) {
             return failedStatus("Could not connect to PostgreSQL: " + e.getMessage());
         } catch (final RuntimeException e) {
