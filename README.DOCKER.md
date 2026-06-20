@@ -26,6 +26,15 @@ docker run --rm -p 8080:8080 \
 Open `/db-demo` to verify that the application can connect to PostgreSQL, create the
 `render_demo_heartbeat` table, insert a heartbeat row, and read database metadata.
 
+Render setup:
+
+1. Create a PostgreSQL database on Render.
+2. Copy the database's internal connection string.
+3. Add it to the `thymeleafexamples-gtvg` web service as `DATABASE_URL`.
+4. Redeploy the web service and open `/db-demo`.
+
+If you use the external connection string, append `sslmode=require` to the URL.
+
 Notes:
 - The `pom.xml` uses `jakarta.servlet:jakarta.servlet-api:5.0.0` (scope provided). Tomcat 10+ is required because it implements Jakarta Servlet 5.
 - The Dockerfile builds the WAR using the `maven:3.8.8` image and then deploys it to `tomcat:10` as `ROOT.war`.
