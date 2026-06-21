@@ -1,0 +1,8 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "mvn -B -DskipTests dependency:go-offline || true",
+  "start": "sudo service docker start"
+}
