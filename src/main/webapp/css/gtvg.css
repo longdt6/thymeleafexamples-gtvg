@@ -201,6 +201,38 @@ body.sme-page-body {
   padding: 0 28px;
 }
 
+.sme-auth-banner {
+  border-bottom: 1px solid var(--sme-border);
+  padding: 14px 34px;
+}
+
+.sme-auth-banner > div {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.sme-auth-banner strong {
+  font-size: 13px;
+}
+
+.sme-auth-banner span {
+  color: var(--sme-muted);
+  font-size: 13px;
+}
+
+.sme-auth-banner--success {
+  background: #e8fbf6;
+  color: #075b48;
+}
+
+.sme-auth-banner--error {
+  background: #fff4ed;
+  color: #9a3412;
+}
+
 .sme-hero {
   align-items: center;
   background:
@@ -723,6 +755,7 @@ body.sme-page-body {
 
 @media (max-width: 680px) {
   .sme-header,
+  .sme-auth-banner,
   .sme-hero,
   .sme-section,
   .sme-cta,
@@ -733,7 +766,8 @@ body.sme-page-body {
 
   .sme-header-actions,
   .sme-hero__actions,
-  .sme-cta__actions {
+  .sme-cta__actions,
+  .sme-auth-banner > div {
     align-items: stretch;
     flex-direction: column;
     width: 100%;

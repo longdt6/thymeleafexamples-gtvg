@@ -39,6 +39,16 @@ public class HomeController implements IGTVGController {
         
         WebContext ctx = new WebContext(webExchange, webExchange.getLocale());
         ctx.setVariable("today", Calendar.getInstance());
+        if (webExchange.hasSession()) {
+            final Object collaborator = webExchange.getSession().getAttributeValue("googleCollaborator");
+            final Object success = webExchange.getSession().getAttributeValue("googleSsoSuccess");
+            final Object error = webExchange.getSession().getAttributeValue("googleSsoError");
+            ctx.setVariable("googleCollaborator", collaborator);
+            ctx.setVariable("googleSsoSuccess", success);
+            ctx.setVariable("googleSsoError", error);
+            webExchange.getSession().removeAttribute("googleSsoSuccess");
+            webExchange.getSession().removeAttribute("googleSsoError");
+        }
         
         templateEngine.process("home", ctx, writer);
         

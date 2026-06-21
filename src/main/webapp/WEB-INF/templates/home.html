@@ -19,10 +19,30 @@
         <a href="#community">C&#7897;ng &#272;&#7891;ng</a>
       </nav>
       <div class="sme-header-actions">
-        <a class="sme-button sme-button--ghost" href="#collaborator">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
+        <a class="sme-button sme-button--ghost" href="/auth/google/collaborator" th:href="@{/auth/google/collaborator}">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
         <a class="sme-button sme-button--primary" href="#join">Tham gia v&#7899;i t&#432; c&#225;ch SME</a>
       </div>
     </header>
+
+    <section class="sme-auth-banner sme-auth-banner--success" th:if="${googleCollaborator != null}" aria-live="polite">
+      <div>
+        <strong>&#272;&#227; k&#7871;t n&#7889;i Google cho C&#7897;ng t&#225;c vi&#234;n</strong>
+        <span><span th:text="${googleCollaborator.name}">Google User</span> &middot; <span th:text="${googleCollaborator.email}">user@example.com</span></span>
+      </div>
+    </section>
+
+    <section class="sme-auth-banner sme-auth-banner--success" th:if="${googleSsoSuccess != null and googleCollaborator == null}" aria-live="polite">
+      <div>
+        <strong th:text="${googleSsoSuccess}">Da ket noi Google thanh cong.</strong>
+      </div>
+    </section>
+
+    <section class="sme-auth-banner sme-auth-banner--error" th:if="${googleSsoError != null}" role="alert">
+      <div>
+        <strong>Google SSO</strong>
+        <span th:text="${googleSsoError}">Google SSO chua duoc cau hinh.</span>
+      </div>
+    </section>
 
     <main>
       <section class="sme-hero" aria-labelledby="hero-title">
@@ -170,7 +190,7 @@
         <p>H&#227;y ch&#7885;n &#273;i&#7875;m b&#7855;t &#273;&#7847;u c&#7911;a b&#7841;n v&#224; gia nh&#7853;p c&#249;ng h&#224;ng ngh&#236;n chuy&#234;n gia &#273;ang x&#226;y d&#7921;ng t&#432;&#417;ng lai cho ho&#7841;t &#273;&#7897;ng SME.</p>
         <div class="sme-cta__actions">
           <a class="sme-button sme-button--primary sme-button--large" href="#join">Tham gia v&#7899;i t&#432; c&#225;ch SME</a>
-          <a class="sme-button sme-button--outline sme-button--large" id="collaborator" href="#collaborator">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
+          <a class="sme-button sme-button--outline sme-button--large" id="collaborator" href="/auth/google/collaborator" th:href="@{/auth/google/collaborator}">Tham gia v&#7899;i t&#432; c&#225;ch C&#7897;ng t&#225;c vi&#234;n</a>
         </div>
       </section>
     </main>
